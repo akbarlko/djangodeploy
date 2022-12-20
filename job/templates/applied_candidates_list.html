@@ -1,0 +1,53 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'recruiter_navigations.html' %}
+
+<div class="bef_log_page" value="recruiter_Applications" style="font-family:'Monotype Corsiva'; font-size:25px; color: white; background-color: black; text-align: center">
+    List of Applied Candidates
+</div>
+
+<hr>
+
+<div class="container">
+<table class="table table-lg table-hover" id="example">
+    <thead>
+    <tr style="background-color: maroon; color: white; text-align: center">
+        <th>No.</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Contact No.</th>
+        <th>Job Title</th>
+        <th>Applied Date</th>
+        <th>Resume</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for i in data %}
+    {% if request.user.id == i.job.recruiter.user.id %}
+    <tr style="text-align: center">
+        <td>{{forloop.counter}}</td>
+        <td>{{i.jobseeker.user.first_name}} {{i.jobseeker.user.last_name}}</td>
+        <td>{{i.jobseeker.user.username}}</td>
+        <td>{{i.jobseeker.mobile}}</td>
+        <td>{{i.job.title}}</td>
+        <td>{{i.applydate}}</td>
+        <td><a href="{{i.resume.url}}">Download Resume</a></td>
+        <td><a href="{% url 'change_status_user' i.id %}" class="btn btn-success btn-sm p-2" onclick="return confirm('Change Status?')">Change Status</a>
+            <a href="{% url 'delete_candidate' i.id %}" class="btn btn-danger btn-sm p-2" onclick="return confirm('Delete application?')">Delete</a>
+        </td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+
+    </tbody>
+</table>
+</div>
+
+{% endblock %}
+
+<script src="{% static 'JS/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'JS/recruiter_page_js.js' %}" type="text/javascript"></script>
